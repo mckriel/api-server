@@ -1,8 +1,8 @@
 package main
 
 import (
-	"api-servers/internal/models"
-	"api-servers/internal/repository/mongodb"
+	"api-servers/internal/models/mongodb"
+	mongodb_repo "api-servers/internal/repository/mongodb"
 	"context"
 	"log"
 	"time"
@@ -11,7 +11,7 @@ import (
 )
 
 func seed_mongodb() error {
-	db, err := mongodb.Connect()
+	db, err := mongodb_repo.Connect()
 	if err != nil {
 		return err
 	}
@@ -41,29 +41,29 @@ func seed_mongodb() error {
 	return nil
 }
 
-func create_sample_users() []models.User {
+func create_sample_users() []mongodb.User {
 	now := time.Now()
 	birth_date_1985 := time.Date(1985, 6, 15, 0, 0, 0, 0, time.UTC)
 	birth_date_1990 := time.Date(1990, 3, 22, 0, 0, 0, 0, time.UTC)
 
-	return []models.User{
+	return []mongodb.User{
 		{
 			ID:         uuid.New().String(),
 			Name:       "Alice Johnson",
 			Email:      "alice.johnson@email.com",
 			Created_At: now,
 			Updated_At: now,
-			Profile: models.Profile{
+			Profile: mongodb.Profile{
 				Phone:         "+1-555-0123",
 				Date_Of_Birth: &birth_date_1985,
 				Preferences: map[string]interface{}{
-					"newsletter":     true,
-					"theme":          "dark",
-					"notifications":  true,
-					"language":       "en",
+					"newsletter":    true,
+					"theme":         "dark",
+					"notifications": true,
+					"language":      "en",
 				},
 			},
-			Addresses: []models.Address{
+			Addresses: []mongodb.Address{
 				{
 					ID:      uuid.New().String(),
 					Type:    "home",
@@ -90,17 +90,17 @@ func create_sample_users() []models.User {
 			Email:      "bob.smith@email.com",
 			Created_At: now,
 			Updated_At: now,
-			Profile: models.Profile{
+			Profile: mongodb.Profile{
 				Phone:         "+1-555-0456",
 				Date_Of_Birth: &birth_date_1990,
 				Preferences: map[string]interface{}{
-					"newsletter":     false,
-					"theme":          "light",
-					"notifications":  false,
-					"language":       "en",
+					"newsletter":    false,
+					"theme":         "light",
+					"notifications": false,
+					"language":      "en",
 				},
 			},
-			Addresses: []models.Address{
+			Addresses: []mongodb.Address{
 				{
 					ID:      uuid.New().String(),
 					Type:    "home",
@@ -118,17 +118,17 @@ func create_sample_users() []models.User {
 			Email:      "carol.davis@email.com",
 			Created_At: now,
 			Updated_At: now,
-			Profile: models.Profile{
+			Profile: mongodb.Profile{
 				Phone:         "+1-555-0789",
 				Date_Of_Birth: nil,
 				Preferences: map[string]interface{}{
-					"newsletter":     true,
-					"theme":          "auto",
-					"notifications":  true,
-					"language":       "es",
+					"newsletter":    true,
+					"theme":         "auto",
+					"notifications": true,
+					"language":      "es",
 				},
 			},
-			Addresses: []models.Address{
+			Addresses: []mongodb.Address{
 				{
 					ID:      uuid.New().String(),
 					Type:    "home",
@@ -143,10 +143,10 @@ func create_sample_users() []models.User {
 	}
 }
 
-func create_sample_products() []models.Product {
+func create_sample_products() []mongodb.Product {
 	now := time.Now()
 
-	return []models.Product{
+	return []mongodb.Product{
 		{
 			ID:          uuid.New().String(),
 			Name:        "Wireless Bluetooth Headphones",
@@ -200,14 +200,14 @@ func create_sample_products() []models.Product {
 	}
 }
 
-func create_sample_orders(users []models.User, products []models.Product) []models.Order {
+func create_sample_orders(users []mongodb.User, products []mongodb.Product) []mongodb.Order {
 	now := time.Now()
 
-	return []models.Order{
+	return []mongodb.Order{
 		{
 			ID:      uuid.New().String(),
 			User_ID: users[0].ID,
-			Order_Items: []models.OrderItem{
+			Order_Items: []mongodb.OrderItem{
 				{
 					Product_ID: products[0].ID,
 					Quantity:   1,
@@ -227,7 +227,7 @@ func create_sample_orders(users []models.User, products []models.Product) []mode
 		{
 			ID:      uuid.New().String(),
 			User_ID: users[1].ID,
-			Order_Items: []models.OrderItem{
+			Order_Items: []mongodb.OrderItem{
 				{
 					Product_ID: products[2].ID,
 					Quantity:   1,
@@ -242,7 +242,7 @@ func create_sample_orders(users []models.User, products []models.Product) []mode
 		{
 			ID:      uuid.New().String(),
 			User_ID: users[2].ID,
-			Order_Items: []models.OrderItem{
+			Order_Items: []mongodb.OrderItem{
 				{
 					Product_ID: products[3].ID,
 					Quantity:   3,
@@ -262,9 +262,9 @@ func create_sample_orders(users []models.User, products []models.Product) []mode
 	}
 }
 
-func seed_users(db *mongodb.Database, ctx context.Context, users []models.User) error {
+func seed_users(db *mongodb_repo.Database, ctx context.Context, users []mongodb.User) error {
 	collection := db.Database.Collection("users")
-	
+
 	for _, user := range users {
 		_, err := collection.InsertOne(ctx, user)
 		if err != nil {
@@ -275,9 +275,9 @@ func seed_users(db *mongodb.Database, ctx context.Context, users []models.User) 
 	return nil
 }
 
-func seed_products(db *mongodb.Database, ctx context.Context, products []models.Product) error {
+func seed_products(db *mongodb_repo.Database, ctx context.Context, products []mongodb.Product) error {
 	collection := db.Database.Collection("products")
-	
+
 	for _, product := range products {
 		_, err := collection.InsertOne(ctx, product)
 		if err != nil {
@@ -288,9 +288,9 @@ func seed_products(db *mongodb.Database, ctx context.Context, products []models.
 	return nil
 }
 
-func seed_orders(db *mongodb.Database, ctx context.Context, orders []models.Order) error {
+func seed_orders(db *mongodb_repo.Database, ctx context.Context, orders []mongodb.Order) error {
 	collection := db.Database.Collection("orders")
-	
+
 	for _, order := range orders {
 		_, err := collection.InsertOne(ctx, order)
 		if err != nil {
