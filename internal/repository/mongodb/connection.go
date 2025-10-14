@@ -25,7 +25,7 @@ func Connect() (*Database, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	connection_uri := "mongodb://root:password@localhost:27017"
+	connection_uri := "mongodb://localhost:27017/api_mongodb"
 	client_options := options.Client().ApplyURI(connection_uri)
 
 	client, err := mongo.Connect(ctx, client_options)
