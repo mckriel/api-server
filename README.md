@@ -51,6 +51,11 @@ graph TB
         Redis[(Redis<br/>Cache & Sessions)]
     end
 
+    subgraph "Legend"
+        Completed[✅ Completed]
+        Pending[⏳ Pending]
+    end
+
     REST --> UserSvc
     REST --> ProductSvc
     REST --> OrderSvc
@@ -74,9 +79,26 @@ graph TB
     CarRepo --> MySQL
     CacheRepo --> Redis
 
+    %% Database styling
     style MongoDB fill:#4DB33D
     style MySQL fill:#00758F
     style Redis fill:#DC382D
+
+    %% Completed components (green stroke and fill)
+    classDef completed fill:#E8F5E8,stroke:#28a745,stroke-width:3px,color:#155724
+    classDef pending fill:#FFF3CD,stroke:#ffc107,stroke-width:2px,color:#856404
+
+    %% Apply completed styling to implemented components
+    class UserRepo,ProductRepo,OrderRepo,MongoDB completed
+    
+    %% Apply pending styling to not-yet-implemented components
+    class CarRepo,CacheRepo,MySQL,Redis pending
+    class UserSvc,ProductSvc,OrderSvc,CarSvc,SessionSvc pending
+    class REST,SOAP,GRPC,GraphQL,WS,WebRTC,Webhook pending
+
+    %% Legend styling
+    style Completed fill:#E8F5E8,stroke:#28a745,stroke-width:3px,color:#155724
+    style Pending fill:#FFF3CD,stroke:#ffc107,stroke-width:2px,color:#856404
 ```
 
 ### Database Layer
