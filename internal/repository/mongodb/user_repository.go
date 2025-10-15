@@ -49,8 +49,8 @@ func (r *userRepository) GetAll() ([]mongodb.User, error) {
 	return users, err
 }
 
-func (r *userRepository) Update(id string, user mongodb.User) error {
-	_, err := r.collection.ReplaceOne(context.Background(), bson.M{"_id": id}, user)
+func (r *userRepository) Update(id string, order mongodb.User) error {
+	_, err := r.collection.ReplaceOne(context.Background(), bson.M{"_id": id}, order)
 	return err
 }
 
