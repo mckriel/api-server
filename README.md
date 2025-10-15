@@ -1,8 +1,83 @@
 # Multi-API Server Demo
 
+**Author:** [Matthew Cameron Kriel](https://matthewkriel.com)  
+**Software Engineer** | 6+ Years Development Experience
+
 A comprehensive Go-based API server demonstrating 7 different API paradigms with multiple database backends. This project serves as a learning resource for understanding various API architectures and data storage patterns.
 
+## API Types
+
+- **REST API** - HTTP methods (GET, POST, PUT, DELETE) with JSON payloads
+- **SOAP API** - XML-based messaging protocol with strict standards and WSDL
+- **gRPC API** - High-performance RPC using Protocol Buffers and HTTP/2
+- **GraphQL API** - Query language for precise data fetching from single endpoint
+- **WebSocket API** - Full-duplex real-time communication over persistent connections
+- **WebRTC API** - Peer-to-peer communication for video, audio, and data
+- **Webhook API** - HTTP callbacks for event-driven system notifications
+
 ## Project Architecture
+
+```mermaid
+graph TB
+    subgraph "API Layer"
+        REST[REST API<br/>HTTP + JSON]
+        SOAP[SOAP API<br/>XML + WSDL]
+        GRPC[gRPC API<br/>Protocol Buffers]
+        GraphQL[GraphQL API<br/>Query Language]
+        WS[WebSocket API<br/>Real-time]
+        WebRTC[WebRTC API<br/>P2P Communication]
+        Webhook[Webhook API<br/>Event Callbacks]
+    end
+
+    subgraph "Service Layer"
+        UserSvc[User Service]
+        ProductSvc[Product Service]
+        OrderSvc[Order Service]
+        CarSvc[Car Service]
+        SessionSvc[Session Service]
+    end
+
+    subgraph "Repository Layer"
+        UserRepo[User Repository]
+        ProductRepo[Product Repository]
+        OrderRepo[Order Repository]
+        CarRepo[Car Repository]
+        CacheRepo[Cache Repository]
+    end
+
+    subgraph "Database Layer"
+        MongoDB[(MongoDB<br/>E-commerce Data)]
+        MySQL[(MySQL<br/>Car Dealership)]
+        Redis[(Redis<br/>Cache & Sessions)]
+    end
+
+    REST --> UserSvc
+    REST --> ProductSvc
+    REST --> OrderSvc
+    SOAP --> CarSvc
+    GRPC --> UserSvc
+    GraphQL --> UserSvc
+    GraphQL --> ProductSvc
+    WS --> SessionSvc
+    WebRTC --> SessionSvc
+    Webhook --> UserSvc
+
+    UserSvc --> UserRepo
+    ProductSvc --> ProductRepo
+    OrderSvc --> OrderRepo
+    CarSvc --> CarRepo
+    SessionSvc --> CacheRepo
+
+    UserRepo --> MongoDB
+    ProductRepo --> MongoDB
+    OrderRepo --> MongoDB
+    CarRepo --> MySQL
+    CacheRepo --> Redis
+
+    style MongoDB fill:#4DB33D
+    style MySQL fill:#00758F
+    style Redis fill:#DC382D
+```
 
 ### Database Layer
 The application uses three different databases, each optimized for different use cases:
@@ -14,7 +89,7 @@ The application uses three different databases, each optimized for different use
 ### Repository Pattern
 All database interactions use the repository pattern for clean separation of concerns and easy testing.
 
-## API Types
+## API Implementation Details
 
 ### 1. REST API
 **What it is:** Representational State Transfer - Uses HTTP methods (GET, POST, PUT, DELETE) with JSON payloads.
