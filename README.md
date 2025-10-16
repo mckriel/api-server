@@ -89,9 +89,10 @@ graph TB
 
     %% Apply completed styling to implemented components
     class UserRepo,ProductRepo,OrderRepo,MongoDB completed
+    class CarRepo,MySQL completed
     
     %% Apply pending styling to not-yet-implemented components
-    class CarRepo,CacheRepo pending
+    class CacheRepo,Redis pending
     class UserSvc,ProductSvc,OrderSvc,CarSvc,SessionSvc pending
     class REST,SOAP,GRPC,GraphQL,WS,WebRTC,Webhook pending
 
