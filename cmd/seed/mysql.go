@@ -11,7 +11,7 @@ import (
 )
 
 func seed_mysql() error {
-	db, err := sql.Open("mysql", "user:password@tcp(localhost:3306)/car_dealership")
+	db, err := sql.Open("mysql", "root:password@tcp(localhost:3306)/api_mysql")
 	if err != nil {
 		return err
 	}
