@@ -3,7 +3,7 @@ package mysql
 import "time"
 
 type Vehicle struct {
-	ID           int       `json:"id" db:"id"`
+	ID           string    `json:"id" db:"id"`
 	VIN          string    `json:"vin" db:"vin"`
 	Make         string    `json:"make" db:"make"`
 	Model        string    `json:"model" db:"model"`
