@@ -6,7 +6,7 @@ import (
 
 type VehicleRepository interface {
 	Create(vehicle mysql.Vehicle) error
-	GetById(id string) (mysql.Vehicle, error)
+	GetByID(id string) (mysql.Vehicle, error)
 	GetByVin(vin string) (mysql.Vehicle, error)
 	GetByMake(make string) ([]mysql.Vehicle, error)
 	GetByStatus(status string) ([]mysql.Vehicle, error)
@@ -18,7 +18,7 @@ type VehicleRepository interface {
 
 type CustomerRepository interface {
 	Create(customer mysql.Customer) error
-	GetById(id string) (mysql.Customer, error)
+	GetByID(id string) (mysql.Customer, error)
 	GetByEmail(email string) (mysql.Customer, error)
 	GetByPhone(phone string) (mysql.Customer, error)
 	GetByName(first_name, last_name string) (mysql.Customer, error)
@@ -29,7 +29,7 @@ type CustomerRepository interface {
 
 type SalespersonRepository interface {
 	Create(salesperson mysql.Salesperson) error
-	GetById(id string) (mysql.Salesperson, error)
+	GetByID(id string) (mysql.Salesperson, error)
 	GetByEmployeeId(employeeId string) (mysql.Salesperson, error)
 	GetByEmail(email string) (mysql.Salesperson, error)
 	GetByDepartment(department string) ([]mysql.Salesperson, error)
@@ -41,7 +41,7 @@ type SalespersonRepository interface {
 
 type SaleRepository interface {
 	Create(sale mysql.Sale) error
-	GetById(id string) (mysql.Sale, error)
+	GetByID(id string) (mysql.Sale, error)
 	GetByCustomerId(customerId string) ([]mysql.Sale, error)
 	GetBySalespersonId(salespersonId string) ([]mysql.Sale, error)
 	GetByVehicleId(vehicleId string) (mysql.Sale, error)
