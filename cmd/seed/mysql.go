@@ -1,6 +1,7 @@
 package main
 
 import (
+	"api-servers/internal"
 	"api-servers/internal/models/mysql"
 	"database/sql"
 	"log"
@@ -11,14 +12,25 @@ import (
 )
 
 func seed_mysql() error {
-	db, err := sql.Open("mysql", "root:password@tcp(localhost:3306)/api_mysql")
+	db, err := internal.GetMySQLConnection()
 	if err != nil {
 		return err
 	}
 	defer db.Close()
 
-	if err = db.Ping(); err != nil {
-		return err
+	clearQueries := []string{
+		"DELETE FROM sales",
+		"DELETE FROM vehicles",
+		"DELETE FROM customers",
+		"DELETE FROM salespersons",
+	}
+
+	log.Println("clearing existing data...")
+	for _, query := range clearQueries {
+		_, err := db.Exec(query)
+		if err != nil {
+			return err
+		}
 	}
 
 	vehicles := create_sample_vehicles()

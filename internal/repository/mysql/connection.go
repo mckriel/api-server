@@ -1,6 +1,7 @@
 package mysql
 
 import (
+	"api-servers/internal"
 	"database/sql"
 	"sync"
 
@@ -20,7 +21,7 @@ func GetDatabase() (*Database, error) {
 	var err error
 
 	once.Do(func() {
-		connection_string := "root:password@tcp(localhost:3306)/api_mysql"
+		connection_string := internal.CONN_MONGODB
 		conn, connection_error := sql.Open("mysql", connection_string)
 
 		if connection_error != nil {

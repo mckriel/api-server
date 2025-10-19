@@ -1,21 +1,22 @@
 package main
 
 import (
+	"api-servers/internal"
 	"api-servers/internal/models/mongodb"
-	mongodb_repo "api-servers/internal/repository/mongodb"
 	"context"
 	"log"
 	"time"
 
 	"github.com/google/uuid"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func seed_mongodb() error {
-	db, err := mongodb_repo.Connect()
+	db, err := internal.GetMongoDBConnection()
 	if err != nil {
 		return err
 	}
-	defer db.Disconnect()
+	defer db.Disconnect(context.Background())
 
 	ctx := context.Background()
 
@@ -262,8 +263,8 @@ func create_sample_orders(users []mongodb.User, products []mongodb.Product) []mo
 	}
 }
 
-func seed_users(db *mongodb_repo.Database, ctx context.Context, users []mongodb.User) error {
-	collection := db.Database.Collection("users")
+func seed_users(client *mongo.Client, ctx context.Context, users []mongodb.User) error {
+	collection := client.Database("api_mongodb").Collection("users")
 
 	for _, user := range users {
 		_, err := collection.InsertOne(ctx, user)
@@ -275,8 +276,8 @@ func seed_users(db *mongodb_repo.Database, ctx context.Context, users []mongodb.
 	return nil
 }
 
-func seed_products(db *mongodb_repo.Database, ctx context.Context, products []mongodb.Product) error {
-	collection := db.Database.Collection("products")
+func seed_products(client *mongo.Client, ctx context.Context, products []mongodb.Product) error {
+	collection := client.Database("api_mongodb").Collection("products")
 
 	for _, product := range products {
 		_, err := collection.InsertOne(ctx, product)
@@ -288,8 +289,8 @@ func seed_products(db *mongodb_repo.Database, ctx context.Context, products []mo
 	return nil
 }
 
-func seed_orders(db *mongodb_repo.Database, ctx context.Context, orders []mongodb.Order) error {
-	collection := db.Database.Collection("orders")
+func seed_orders(client *mongo.Client, ctx context.Context, orders []mongodb.Order) error {
+	collection := client.Database("api_mongodb").Collection("orders")
 
 	for _, order := range orders {
 		_, err := collection.InsertOne(ctx, order)

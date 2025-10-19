@@ -1,6 +1,7 @@
 package mongodb
 
 import (
+	"api-servers/internal"
 	"context"
 	"fmt"
 	"log"
@@ -25,7 +26,7 @@ func Connect() (*Database, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	connection_uri := "mongodb://localhost:27017/api_mongodb"
+	connection_uri := internal.CONN_MONGODB
 	client_options := options.Client().ApplyURI(connection_uri)
 
 	client, err := mongo.Connect(ctx, client_options)
