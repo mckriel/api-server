@@ -11,6 +11,22 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
+func drop_mongo_collections(client *mongo.Client, ctx context.Context) error {
+	db := client.Database("api_mongodb")
+
+	collections := []string{"users", "products", "orders"}
+	for _, collection_name := range collections {
+		err := db.Collection(collection_name).Drop(ctx)
+		if err != nil {
+			log.Printf("warning: could not drop collection %s: %v", collection_name, err)
+		} else {
+			log.Printf("dropped collection: %s", collection_name)
+		}
+	}
+
+	return nil
+}
+
 func seed_mongodb() error {
 	db, err := internal.GetMongoDBConnection()
 	if err != nil {
@@ -19,6 +35,11 @@ func seed_mongodb() error {
 	defer db.Disconnect(context.Background())
 
 	ctx := context.Background()
+
+	err = drop_mongo_collections(db, ctx)
+	if err != nil {
+		return err
+	}
 
 	users := create_sample_users()
 	err = seed_users(db, ctx, users)
