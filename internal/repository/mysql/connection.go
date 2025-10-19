@@ -21,7 +21,7 @@ func GetDatabase() (*Database, error) {
 	var err error
 
 	once.Do(func() {
-		connection_string := internal.CONN_MONGODB
+		connection_string := internal.CONN_MYSQL
 		conn, connection_error := sql.Open("mysql", connection_string)
 
 		if connection_error != nil {
