@@ -2,14 +2,14 @@ package mysql
 
 import (
 	"api-servers/internal"
-	"database/sql"
 	"sync"
 
+	"github.com/jmoiron/sqlx"
 	_ "github.com/go-sql-driver/mysql"
 )
 
 type Database struct {
-	Connection *sql.DB
+	Connection *sqlx.DB
 }
 
 var (
@@ -22,7 +22,7 @@ func GetDatabase() (*Database, error) {
 
 	once.Do(func() {
 		connection_string := internal.CONN_MYSQL
-		conn, connection_error := sql.Open("mysql", connection_string)
+		conn, connection_error := sqlx.Open("mysql", connection_string)
 
 		if connection_error != nil {
 			err = connection_error
