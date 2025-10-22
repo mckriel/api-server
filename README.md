@@ -1,7 +1,6 @@
 # Multi-API Server Demo
 
-**Author:** [Matthew Cameron Kriel](https://matthewkriel.com)  
-**Software Engineer** | 6+ Years Development Experience
+**Author:** [Matthew Cameron Kriel](https://matthewkriel.com)
 
 A comprehensive Go-based API server demonstrating 7 different API paradigms with multiple database backends. This project serves as a learning resource for understanding various API architectures and data storage patterns.
 
