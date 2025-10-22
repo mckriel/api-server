@@ -33,7 +33,7 @@ graph TB
         UserSvc[User Service]
         ProductSvc[Product Service]
         OrderSvc[Order Service]
-        CarSvc[Car Service]
+        DealershipSvc[Dealership Service]
         SessionSvc[Session Service]
     end
 
@@ -62,7 +62,7 @@ graph TB
     REST --> UserSvc
     REST --> ProductSvc
     REST --> OrderSvc
-    SOAP --> CarSvc
+    SOAP --> DealershipSvc
     GRPC --> UserSvc
     GraphQL --> UserSvc
     GraphQL --> ProductSvc
@@ -73,10 +73,10 @@ graph TB
     UserSvc --> UserRepo
     ProductSvc --> ProductRepo
     OrderSvc --> OrderRepo
-    CarSvc --> CustomerRepo
-    CarSvc --> VehicleRepo
-    CarSvc --> SalespersonRepo
-    CarSvc --> SaleRepo
+    DealershipSvc --> CustomerRepo
+    DealershipSvc --> VehicleRepo
+    DealershipSvc --> SalespersonRepo
+    DealershipSvc --> SaleRepo
     SessionSvc --> SessionRepo
     SessionSvc --> CacheRepo
 
@@ -105,7 +105,7 @@ graph TB
     class SessionRepo,CacheRepo,Redis completed
     
     %% Apply pending styling to not-yet-implemented components
-    class UserSvc,ProductSvc,OrderSvc,CarSvc,SessionSvc pending
+    class UserSvc,ProductSvc,OrderSvc,DealershipSvc,SessionSvc pending
     class REST,SOAP,GRPC,GraphQL,WS,WebRTC,Webhook pending
 
     %% Legend styling
