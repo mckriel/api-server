@@ -2,19 +2,20 @@ package redis
 
 import (
 	"api-servers/internal/models/redis"
+	"context"
 	"time"
 )
 
 type SessionRepository interface {
-	Create(session redis.Session) error
-	GetByID(id string) (redis.Session, error)
-	GetByToken(token string) (redis.Session, error)
-	GetByUserID(userID string) ([]redis.Session, error)
-	GetActiveByUserID(userID string) ([]redis.Session, error)
-	Update(id string, session redis.Session) error
-	Delete(id string) error
-	DeleteByUserID(userID string) error
-	DeleteExpired() error
+	Create(ctx context.Context, session redis.Session) error
+	GetByID(ctx context.Context, id string) (redis.Session, error)
+	GetByToken(ctx context.Context, token string) (redis.Session, error)
+	GetByUserID(ctx context.Context, userID string) ([]redis.Session, error)
+	GetActiveByUserID(ctx context.Context, userID string) ([]redis.Session, error)
+	Update(ctx context.Context, id string, session redis.Session) error
+	Delete(ctx context.Context, id string) error
+	DeleteByUserID(ctx context.Context, userID string) error
+	DeleteExpired(ctx context.Context) error
 }
 
 type CacheRepository interface {
