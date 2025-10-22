@@ -45,6 +45,7 @@ graph TB
         VehicleRepo[Vehicle Repository]
         SalespersonRepo[Salesperson Repository]
         SaleRepo[Sale Repository]
+        SessionRepo[Session Repository]
         CacheRepo[Cache Repository]
     end
 
@@ -76,6 +77,7 @@ graph TB
     CarSvc --> VehicleRepo
     CarSvc --> SalespersonRepo
     CarSvc --> SaleRepo
+    SessionSvc --> SessionRepo
     SessionSvc --> CacheRepo
 
     UserRepo --> MongoDB
@@ -85,6 +87,7 @@ graph TB
     VehicleRepo --> MySQL
     SalespersonRepo --> MySQL
     SaleRepo --> MySQL
+    SessionRepo --> Redis
     CacheRepo --> Redis
 
     %% Database styling (keep original database colors)
@@ -99,9 +102,9 @@ graph TB
     %% Apply completed styling to implemented components
     class UserRepo,ProductRepo,OrderRepo,MongoDB completed
     class CustomerRepo,VehicleRepo,SalespersonRepo,SaleRepo,MySQL completed
+    class SessionRepo,CacheRepo,Redis completed
     
     %% Apply pending styling to not-yet-implemented components
-    class CacheRepo,Redis pending
     class UserSvc,ProductSvc,OrderSvc,CarSvc,SessionSvc pending
     class REST,SOAP,GRPC,GraphQL,WS,WebRTC,Webhook pending
 

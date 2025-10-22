@@ -67,7 +67,6 @@ func (r *sessionRepository) GetByID(ctx context.Context, id string) (redis.Sessi
 
 }
 
-// Add the other 6 functions as stubs for now:
 func (r *sessionRepository) GetByToken(ctx context.Context, token string) (redis.Session, error) {
 	var session redis.Session
 
@@ -81,7 +80,6 @@ func (r *sessionRepository) GetByToken(ctx context.Context, token string) (redis
 		return session, fmt.Errorf("failed to get token mapping: %w", err)
 	}
 
-	// Get session ID from token mapping
 	session_id := result.Val()
 	return r.GetByID(ctx, session_id)
 }
@@ -97,10 +95,10 @@ func (r *sessionRepository) GetByUserID(ctx context.Context, userID string) ([]r
 	}
 
 	for _, key := range keys.Val() {
-		session_id := key[8:] // Remove "session:" prefix
+		session_id := key[8:]
 		session, err := r.GetByID(ctx, session_id)
 		if err != nil {
-			continue // Skip sessions that can't be retrieved
+			continue
 		}
 		if session.User_ID == userID {
 			sessions = append(sessions, session)
@@ -129,40 +127,33 @@ func (r *sessionRepository) GetActiveByUserID(ctx context.Context, userID string
 }
 
 func (r *sessionRepository) Update(ctx context.Context, id string, session redis.Session) error {
-	// Check if session exists
 	_, err := r.GetByID(ctx, id)
 	if err != nil {
-		return err // Session not found
+		return err
 	}
 
-	// Set the ID to ensure consistency
 	session.ID = id
 
-	// Delete old session and token mapping
 	err = r.Delete(ctx, id)
 	if err != nil {
 		return fmt.Errorf("failed to delete old session: %w", err)
 	}
 
-	// Create new session
 	return r.Create(ctx, session)
 }
 
 func (r *sessionRepository) Delete(ctx context.Context, id string) error {
-	// Get session to find token for cleanup
 	session, err := r.GetByID(ctx, id)
 	if err != nil {
-		return err // Session not found or other error
+		return err
 	}
 
-	// Delete main session key
 	key := "session:" + id
 	err = r.db.Connection.Del(ctx, key).Err()
 	if err != nil {
 		return fmt.Errorf("failed to delete session: %w", err)
 	}
 
-	// Delete token mapping
 	token_key := "session:token:" + session.Token
 	err = r.db.Connection.Del(ctx, token_key).Err()
 	if err != nil {
@@ -181,7 +172,6 @@ func (r *sessionRepository) DeleteByUserID(ctx context.Context, userID string) e
 	for _, session := range sessions {
 		err := r.Delete(ctx, session.ID)
 		if err != nil {
-			// Log error but continue with other sessions
 			continue
 		}
 	}
@@ -201,13 +191,12 @@ func (r *sessionRepository) DeleteExpired(ctx context.Context) error {
 	deleted_count := 0
 
 	for _, key := range keys.Val() {
-		session_id := key[8:] // Remove "session:" prefix
+		session_id := key[8:]
 		session, err := r.GetByID(ctx, session_id)
 		if err != nil {
-			continue // Skip sessions that can't be retrieved
+			continue
 		}
 
-		// Delete if expired
 		if session.Expires_At.Before(now) {
 			err := r.Delete(ctx, session_id)
 			if err == nil {

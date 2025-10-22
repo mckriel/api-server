@@ -19,13 +19,13 @@ type SessionRepository interface {
 }
 
 type CacheRepository interface {
-	Set(key string, value string, ttl time.Duration) error
-	Get(key string) (string, error)
-	GetMultiple(keys []string) (map[string]string, error)
-	Delete(key string) error
-	DeleteMultiple(keys []string) error
-	Exists(key string) (bool, error)
-	SetTTL(key string, ttl time.Duration) error
-	GetTTL(key string) (time.Duration, error)
-	Clear() error
+	Set(ctx context.Context, key string, value string, ttl time.Duration) error
+	Get(ctx context.Context, key string) (string, error)
+	GetMultiple(ctx context.Context, keys []string) (map[string]string, error)
+	Delete(ctx context.Context, key string) error
+	DeleteMultiple(ctx context.Context, keys []string) error
+	Exists(ctx context.Context, key string) (bool, error)
+	SetTTL(ctx context.Context, key string, ttl time.Duration) error
+	GetTTL(ctx context.Context, key string) (time.Duration, error)
+	Clear(ctx context.Context) error
 }
