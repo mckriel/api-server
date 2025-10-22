@@ -61,10 +61,13 @@ graph TB
     REST --> UserSvc
     REST --> ProductSvc
     REST --> OrderSvc
+    REST --> DealershipSvc
     SOAP --> DealershipSvc
     GRPC --> UserSvc
+    GRPC --> DealershipSvc
     GraphQL --> UserSvc
     GraphQL --> ProductSvc
+    GraphQL --> DealershipSvc
     WS --> SessionSvc
     WebRTC --> SessionSvc
     Webhook --> UserSvc

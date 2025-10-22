@@ -1,4 +1,4 @@
-package mysql
+package dealership
 
 import (
 	"api-servers/internal/models/mysql"
