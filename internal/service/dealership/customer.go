@@ -45,19 +45,19 @@ func (s *service) ProcessCreditApplication(ctx context.Context, customerID strin
 	approved := creditScore >= 650
 	creditLimit := float64(0)
 	interestRate := 15.0
-	approvalReason := "credit score too low"
+	approvalReason := CreditApprovalReasonLowScore
 
 	if approved {
 		creditLimit = float64(creditScore)
 		if creditScore >= 750 {
 			interestRate = 3.5
-			approvalReason = "excellent credit score"
+			approvalReason = CreditApprovalReasonExcellent
 		} else if creditScore >= 700 {
 			interestRate = 5.9
-			approvalReason = "good credit score"
+			approvalReason = CreditApprovalReasonGood
 		} else {
 			interestRate = 8.9
-			approvalReason = "fair credit score"
+			approvalReason = CreditApprovalReasonFair
 		}
 	}
 

@@ -12,6 +12,15 @@ const (
 	VehicleStatusPending     VehicleStatus = "pending"
 )
 
+type FuelType string
+
+const (
+	FuelTypeGasoline FuelType = "gasoline"
+	FuelTypeDiesel   FuelType = "diesel"
+	FuelTypeElectric FuelType = "electric"
+	FuelTypeHybrid   FuelType = "hybrid"
+)
+
 type Vehicle struct {
 	ID           string        `json:"id" db:"id"`
 	VIN          string        `json:"vin" db:"vin"`
@@ -24,7 +33,7 @@ type Vehicle struct {
 	Status       VehicleStatus `json:"status" db:"status"`
 	Engine_Type  string        `json:"engine_type" db:"engine_type"`
 	Transmission string        `json:"transmission" db:"transmission"`
-	Fuel_Type    string        `json:"fuel_type" db:"fuel_type"`
+	Fuel_Type    FuelType `json:"fuel_type" db:"fuel_type"`
 	Created_At   time.Time     `json:"created_at" db:"created_at"`
 	Updated_At   time.Time     `json:"updated_at" db:"updated_at"`
 }

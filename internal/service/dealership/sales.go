@@ -63,10 +63,10 @@ func (s *service) CalculateFinancingOperations(ctx context.Context, vehicleID st
 	}
 
 	financingOptions := []FinancingOption{
-		s.calculateFinancingOption(loanAmount, creditDecision.InterestRate, 36),
-		s.calculateFinancingOption(loanAmount, creditDecision.InterestRate+0.5, 48),
-		s.calculateFinancingOption(loanAmount, creditDecision.InterestRate+1.0, 60),
-		s.calculateFinancingOption(loanAmount, creditDecision.InterestRate+1.5, 72),
+		s.calculateFinancingOption(loanAmount, creditDecision.InterestRate, int(FinancingTerm36Months)),
+		s.calculateFinancingOption(loanAmount, creditDecision.InterestRate+0.5, int(FinancingTerm48Months)),
+		s.calculateFinancingOption(loanAmount, creditDecision.InterestRate+1.0, int(FinancingTerm60Months)),
+		s.calculateFinancingOption(loanAmount, creditDecision.InterestRate+1.5, int(FinancingTerm72Months)),
 	}
 
 	return FinancingOptions{
@@ -98,7 +98,7 @@ func (s *service) ProcessVehicleSale(ctx context.Context, saleRequest SaleReques
 	contract := SalesContract{
 		ContractID:  uuid.New().String(),
 		SaleID:      sale.ID,
-		Terms:       "Standard vehicle purchase agreement",
+		Terms:       ContractTermsStandard,
 		GeneratedAt: time.Now(),
 	}
 

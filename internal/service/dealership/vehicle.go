@@ -57,8 +57,8 @@ func (s *service) ReserveVehicle(ctx context.Context, vehicleID, customerID stri
 		return fmt.Errorf("could not find vehicle: %w", err)
 	}
 
-	if vehicle.Status != "available" {
-		return fmt.Errorf("vehicle is not available for reservation: %w", &vehicleID)
+	if vehicle.Status != mysql.VehicleStatusAvailable {
+		return fmt.Errorf("vehicle %s is not available for reservation", vehicleID)
 	}
 
 	_, err = s.customer_repo.GetByID(customerID)
@@ -66,7 +66,7 @@ func (s *service) ReserveVehicle(ctx context.Context, vehicleID, customerID stri
 		return fmt.Errorf("customer not found: %w", err)
 	}
 
-	vehicle.Status = "reserved"
+	vehicle.Status = mysql.VehicleStatusReserved
 	vehicle.Updated_At = time.Now()
 
 	err = s.vehicle_repo.Update(vehicleID, vehicle)
@@ -104,7 +104,7 @@ func (s *service) matchesPreferences(vehicle mysql.Vehicle, preferences VehicleP
 	}
 
 	if len(preferences.FuelTypes) > 0 {
-		fuelSet := make(map[string]bool, len(preferences.FuelTypes))
+		fuelSet := make(map[mysql.FuelType]bool, len(preferences.FuelTypes))
 		for _, fuel := range preferences.FuelTypes {
 			fuelSet[fuel] = true
 		}

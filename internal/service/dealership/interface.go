@@ -15,6 +15,33 @@ const (
 	SalesSessionStatusExpired   SalesSessionStatus = "expired"
 )
 
+type CreditApprovalReason string
+
+const (
+	CreditApprovalReasonLowScore  CreditApprovalReason = "credit score too low"
+	CreditApprovalReasonExcellent CreditApprovalReason = "excellent credit score"
+	CreditApprovalReasonGood      CreditApprovalReason = "good credit score"
+	CreditApprovalReasonFair      CreditApprovalReason = "fair credit score"
+)
+
+type FinancingTerm int
+
+const (
+	FinancingTerm36Months FinancingTerm = 36
+	FinancingTerm48Months FinancingTerm = 48
+	FinancingTerm60Months FinancingTerm = 60
+	FinancingTerm72Months FinancingTerm = 72
+)
+
+type ContractTerms string
+
+const (
+	ContractTermsStandard ContractTerms = "Standard vehicle purchase agreement"
+	ContractTermsExtended ContractTerms = "Extended warranty agreement"
+	ContractTermsLease    ContractTerms = "Vehicle lease agreement"
+)
+
+
 type DealershipService interface {
 	// customer
 	RegisterNewCustomer(ctx context.Context, application CustomerApplication) (*mysql.Customer, error)
@@ -51,12 +78,12 @@ type CustomerApplication struct {
 }
 
 type CreditDecision struct {
-	CustomerID     string  `json:"customer_id"`
-	Approved       bool    `json:"approved"`
-	CreditLimit    float64 `json:"credit_limit"`
-	InterestRate   float64 `json:"interest_rate"`
-	ApprovalReason string  `json:"approval_reason"`
-	CreditScore    int     `json:"credit_score"`
+	CustomerID     string               `json:"customer_id"`
+	Approved       bool                 `json:"approved"`
+	CreditLimit    float64              `json:"credit_limit"`
+	InterestRate   float64              `json:"interest_rate"`
+	ApprovalReason CreditApprovalReason `json:"approval_reason"`
+	CreditScore    int                  `json:"credit_score"`
 }
 
 type CustomerProfile struct {
@@ -69,26 +96,26 @@ type CustomerProfile struct {
 }
 
 type VehicleInput struct {
-	VIN          string  `json:"vin"`
-	Make         string  `json:"make"`
-	Model        string  `json:"model"`
-	Year         int     `json:"year"`
-	Color        string  `json:"color"`
-	Mileage      int     `json:"mileage"`
-	Price        float64 `json:"price"`
-	EngineType   string  `json:"engine_type"`
-	Transmission string  `json:"transmission"`
-	FuelType     string  `json:"fuel_type"`
+	VIN          string          `json:"vin"`
+	Make         string          `json:"make"`
+	Model        string          `json:"model"`
+	Year         int             `json:"year"`
+	Color        string          `json:"color"`
+	Mileage      int             `json:"mileage"`
+	Price        float64         `json:"price"`
+	EngineType   string          `json:"engine_type"`
+	Transmission string          `json:"transmission"`
+	FuelType     mysql.FuelType  `json:"fuel_type"`
 }
 
 type VehiclePreferences struct {
-	MaxPrice   float64  `json:"max_price"`
-	MinPrice   float64  `json:"min_price"`
-	Makes      []string `json:"makes"`
-	MaxMileage int      `json:"max_mileage"`
-	MaxYear    int      `json:"max_year"`
-	MinYear    int      `json:"min_year"`
-	FuelTypes  []string `json:"fuel_types"`
+	MaxPrice   float64    `json:"max_price"`
+	MinPrice   float64    `json:"min_price"`
+	Makes      []string   `json:"makes"`
+	MaxMileage int        `json:"max_mileage"`
+	MaxYear    int        `json:"max_year"`
+	MinYear    int        `json:"min_year"`
+	FuelTypes  []mysql.FuelType `json:"fuel_types"`
 }
 
 type SalesSession struct {
@@ -130,10 +157,10 @@ type FinancingOption struct {
 }
 
 type SalesContract struct {
-	ContractID  string    `json:"contract_id"`
-	SaleID      string    `json:"sale_id"`
-	Terms       string    `json:"terms"`
-	GeneratedAt time.Time `json:"generated_at"`
+	ContractID  string        `json:"contract_id"`
+	SaleID      string        `json:"sale_id"`
+	Terms       ContractTerms `json:"terms"`
+	GeneratedAt time.Time     `json:"generated_at"`
 }
 
 type FinancingDetails struct {
