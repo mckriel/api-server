@@ -6,6 +6,15 @@ import (
 	"time"
 )
 
+type SalesSessionStatus string
+
+const (
+	SalesSessionStatusActive    SalesSessionStatus = "active"
+	SalesSessionStatusCompleted SalesSessionStatus = "completed"
+	SalesSessionStatusCancelled SalesSessionStatus = "cancelled"
+	SalesSessionStatusExpired   SalesSessionStatus = "expired"
+)
+
 type DealershipService interface {
 	// customer
 	RegisterNewCustomer(ctx context.Context, application CustomerApplication) (*mysql.Customer, error)
@@ -83,12 +92,12 @@ type VehiclePreferences struct {
 }
 
 type SalesSession struct {
-	SessionID   string            `json:"session_id"`
-	Customer    mysql.Customer    `json:"customer"`
-	Vehicle     mysql.Vehicle     `json:"vehicle"`
-	Salesperson mysql.Salesperson `json:"salesperson"`
-	StartedAt   time.Time         `json:"started_at"`
-	Status      string            `json:"status"`
+	SessionID   string             `json:"session_id"`
+	Customer    mysql.Customer     `json:"customer"`
+	Vehicle     mysql.Vehicle      `json:"vehicle"`
+	Salesperson mysql.Salesperson  `json:"salesperson"`
+	StartedAt   time.Time          `json:"started_at"`
+	Status      SalesSessionStatus `json:"status"`
 }
 
 type SaleRequest struct {
