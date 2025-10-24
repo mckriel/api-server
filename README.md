@@ -32,8 +32,14 @@ graph TB
         UserSvc[User Service]
         ProductSvc[Product Service]
         OrderSvc[Order Service]
-        DealershipSvc[Dealership Service]
         SessionSvc[Session Service]
+        
+        subgraph "DealershipSvc[Dealership Service]"
+            CustomerOps[Customer Operations<br/>• Registration<br/>• Credit Applications<br/>• Profiles]
+            VehicleOps[Vehicle Operations<br/>• Inventory Management<br/>• Search & Filtering<br/>• Reservations]
+            SalesOps[Sales Operations<br/>• Sales Process<br/>• Financing<br/>• Transactions]
+            ReportOps[Reporting Operations<br/>• Sales Reports<br/>• Performance Analytics<br/>• Inventory Reports]
+        end
     end
 
     subgraph "Repository Layer"
@@ -61,13 +67,14 @@ graph TB
     REST --> UserSvc
     REST --> ProductSvc
     REST --> OrderSvc
-    REST --> DealershipSvc
-    SOAP --> DealershipSvc
+    REST --> CustomerOps
+    REST --> VehicleOps
+    SOAP --> SalesOps
     GRPC --> UserSvc
-    GRPC --> DealershipSvc
+    GRPC --> ReportOps
     GraphQL --> UserSvc
     GraphQL --> ProductSvc
-    GraphQL --> DealershipSvc
+    GraphQL --> ReportOps
     WS --> SessionSvc
     WebRTC --> SessionSvc
     Webhook --> UserSvc
@@ -75,10 +82,14 @@ graph TB
     UserSvc --> UserRepo
     ProductSvc --> ProductRepo
     OrderSvc --> OrderRepo
-    DealershipSvc --> CustomerRepo
-    DealershipSvc --> VehicleRepo
-    DealershipSvc --> SalespersonRepo
-    DealershipSvc --> SaleRepo
+    CustomerOps --> CustomerRepo
+    VehicleOps --> VehicleRepo
+    SalesOps --> SalespersonRepo
+    SalesOps --> SaleRepo
+    ReportOps --> CustomerRepo
+    ReportOps --> VehicleRepo
+    ReportOps --> SalespersonRepo
+    ReportOps --> SaleRepo
     SessionSvc --> SessionRepo
     SessionSvc --> CacheRepo
 
@@ -106,8 +117,11 @@ graph TB
     class CustomerRepo,VehicleRepo,SalespersonRepo,SaleRepo,MySQL completed
     class SessionRepo,CacheRepo,Redis completed
     
+    %% Apply completed styling to DealershipSvc components
+    class CustomerOps,VehicleOps,SalesOps,ReportOps completed
+    
     %% Apply pending styling to not-yet-implemented components
-    class UserSvc,ProductSvc,OrderSvc,DealershipSvc,SessionSvc pending
+    class UserSvc,ProductSvc,OrderSvc,SessionSvc pending
     class REST,SOAP,GRPC,GraphQL,WS,WebRTC,Webhook pending
 
     %% Legend styling
