@@ -34,13 +34,6 @@ graph TB
         OrderSvc[Order Service]
         SessionSvc[Session Service]
         DealershipSvc[Dealership Service]
-        
-        subgraph DEALERSHIP ["DEALERSHIP COMPONENTS"]
-            CustomerOps[Customer]
-            VehicleOps[Vehicle]
-            SalesOps[Sales]
-            ReportOps[Reporting]
-        end
     end
 
     subgraph REPOSITORY ["REPOSITORY LAYER"]
@@ -61,10 +54,6 @@ graph TB
         Redis[(Redis<br/>Cache & Sessions)]
     end
 
-    subgraph "Legend"
-        Completed[Completed]
-    end
-
     REST --> UserSvc
     REST --> ProductSvc
     REST --> OrderSvc
@@ -83,15 +72,10 @@ graph TB
     ProductSvc --> ProductRepo
     OrderSvc --> OrderRepo
     
-    DealershipSvc --> CustomerOps
-    DealershipSvc --> VehicleOps
-    DealershipSvc --> SalesOps
-    DealershipSvc --> ReportOps
-    
-    DEALERSHIP --> CustomerRepo
-    DEALERSHIP --> VehicleRepo
-    DEALERSHIP --> SalespersonRepo
-    DEALERSHIP --> SaleRepo
+    DealershipSvc --> CustomerRepo
+    DealershipSvc --> VehicleRepo
+    DealershipSvc --> SalespersonRepo
+    DealershipSvc --> SaleRepo
     SessionSvc --> SessionRepo
     SessionSvc --> CacheRepo
 
@@ -119,15 +103,13 @@ graph TB
     class CustomerRepo,VehicleRepo,SalespersonRepo,SaleRepo,MySQL completed
     class SessionRepo,CacheRepo,Redis completed
     
-    %% Apply completed styling to DealershipSvc and components
-    class DealershipSvc,CustomerOps,VehicleOps,SalesOps,ReportOps completed
+    %% Apply completed styling to DealershipSvc
+    class DealershipSvc completed
     
     %% Apply pending styling to not-yet-implemented components
     class UserSvc,ProductSvc,OrderSvc,SessionSvc pending
     class REST,SOAP,GRPC,GraphQL,WS,WebRTC,Webhook pending
 
-    %% Legend styling
-    style Completed fill:#E8F5E8,stroke:#28a745,stroke-width:3px,color:#155724
 ```
 
 ### Database Layer
