@@ -36,10 +36,10 @@ graph TB
         DealershipSvc[Dealership Service]
         
         subgraph DEALERSHIP ["DEALERSHIP COMPONENTS"]
-            CustomerOps[Customer Operations<br/>• Registration<br/>• Credit Applications<br/>• Profiles]
-            VehicleOps[Vehicle Operations<br/>• Inventory Management<br/>• Search & Filtering<br/>• Reservations]
-            SalesOps[Sales Operations<br/>• Sales Process<br/>• Financing<br/>• Transactions]
-            ReportOps[Reporting Operations<br/>• Sales Reports<br/>• Performance Analytics<br/>• Inventory Reports]
+            CustomerOps[Customer]
+            VehicleOps[Vehicle]
+            SalesOps[Sales]
+            ReportOps[Reporting]
         end
     end
 
