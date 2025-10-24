@@ -51,6 +51,8 @@ type DealershipService interface {
 
 	// vehicle
 	AddVehicleToInventory(ctx context.Context, vehicle VehicleInput) (*mysql.Vehicle, error)
+	GetAllVehicles(ctx context.Context) ([]mysql.Vehicle, error)
+	GetVehicleByID(ctx context.Context, vehicleID string) (*mysql.Vehicle, error)
 	FindVehiclesForCustomers(ctx context.Context, customerID string, preferences VehiclePreferences) ([]mysql.Vehicle, error)
 	ReserveVehicle(ctx context.Context, vehicleID, customerID string) error
 

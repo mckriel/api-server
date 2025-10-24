@@ -35,6 +35,22 @@ func (s *service) AddVehicleToInventory(ctx context.Context, vehicle VehicleInpu
 	return &newVehicle, nil
 }
 
+func (s *service) GetAllVehicles(ctx context.Context) ([]mysql.Vehicle, error) {
+	vehicles, err := s.vehicle_repo.GetAll()
+	if err != nil {
+		return nil, fmt.Errorf("failed to retrieve vehicles: %w", err)
+	}
+	return vehicles, nil
+}
+
+func (s *service) GetVehicleByID(ctx context.Context, vehicleID string) (*mysql.Vehicle, error) {
+	vehicle, err := s.vehicle_repo.GetByID(vehicleID)
+	if err != nil {
+		return nil, fmt.Errorf("vehicle not found: %w", err)
+	}
+	return &vehicle, nil
+}
+
 func (s *service) FindVehiclesForCustomers(ctx context.Context, customerID string, preferences VehiclePreferences) ([]mysql.Vehicle, error) {
 	allVehicles, err := s.vehicle_repo.GetAll()
 	if err != nil {
