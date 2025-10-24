@@ -6,18 +6,18 @@ import (
 	"net/http"
 )
 
-type SalesHandler struct {
+type SaleHandler struct {
 	dealership_service dealership.DealershipService
 }
 
-func NewSalesHandler(service dealership.DealershipService) *SalesHandler {
-	return &SalesHandler{
+func NewSaleHandler(service dealership.DealershipService) *SaleHandler {
+	return &SaleHandler{
 		dealership_service: service,
 	}
 }
 
 // POST /sales/start
-func (h *SalesHandler) StartSalesProcess(w http.ResponseWriter, r *http.Request) {
+func (h *SaleHandler) StartSalesProcess(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	var startRequest struct {
@@ -53,7 +53,7 @@ func (h *SalesHandler) StartSalesProcess(w http.ResponseWriter, r *http.Request)
 }
 
 // POST /sales/financing
-func (h *SalesHandler) CalculateFinancing(w http.ResponseWriter, r *http.Request) {
+func (h *SaleHandler) CalculateFinancing(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	var financingRequest struct {
@@ -89,7 +89,7 @@ func (h *SalesHandler) CalculateFinancing(w http.ResponseWriter, r *http.Request
 }
 
 // POST /sales/complete
-func (h *SalesHandler) ProcessVehicleSale(w http.ResponseWriter, r *http.Request) {
+func (h *SaleHandler) ProcessVehicleSale(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	var saleRequest dealership.SaleRequest
@@ -114,4 +114,3 @@ func (h *SalesHandler) ProcessVehicleSale(w http.ResponseWriter, r *http.Request
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(saleResult)
 }
-

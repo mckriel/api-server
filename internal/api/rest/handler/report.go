@@ -6,18 +6,18 @@ import (
 	"net/http"
 )
 
-type ReportingHandler struct {
+type ReportHandler struct {
 	dealership_service dealership.DealershipService
 }
 
-func NewReportingHandler(service dealership.DealershipService) *ReportingHandler {
-	return &ReportingHandler{
+func NewReportingHandler(service dealership.DealershipService) *ReportHandler {
+	return &ReportHandler{
 		dealership_service: service,
 	}
 }
 
 // GET /reports/sales
-func (h *ReportingHandler) GenerateSalesReport(w http.ResponseWriter, r *http.Request) {
+func (h *ReportHandler) GenerateSalesReport(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	var reportRequest dealership.ReportPeriod
@@ -44,7 +44,7 @@ func (h *ReportingHandler) GenerateSalesReport(w http.ResponseWriter, r *http.Re
 }
 
 // GET /reports/performance
-func (h *ReportingHandler) GetTopPerformers(w http.ResponseWriter, r *http.Request) {
+func (h *ReportHandler) GetTopPerformers(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	var reportRequest dealership.ReportPeriod
@@ -71,7 +71,7 @@ func (h *ReportingHandler) GetTopPerformers(w http.ResponseWriter, r *http.Reque
 }
 
 // GET /reports/inventory
-func (h *ReportingHandler) GetInventoryReport(w http.ResponseWriter, r *http.Request) {
+func (h *ReportHandler) GetInventoryReport(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	inventoryReport, err := h.dealership_service.GetInventoryReport(r.Context())
