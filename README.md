@@ -18,7 +18,7 @@ A comprehensive Go-based API server demonstrating 7 different API paradigms with
 
 ```mermaid
 graph TB
-    subgraph "API Layer"
+    subgraph API ["API LAYER"]
         REST[REST API<br/>HTTP + JSON]
         SOAP[SOAP API<br/>XML + WSDL]
         GRPC[gRPC API<br/>Protocol Buffers]
@@ -28,13 +28,14 @@ graph TB
         Webhook[Webhook API<br/>Event Callbacks]
     end
 
-    subgraph "Service Layer"
+    subgraph SERVICE ["SERVICE LAYER"]
         UserSvc[User Service]
         ProductSvc[Product Service]
         OrderSvc[Order Service]
         SessionSvc[Session Service]
+        DealershipSvc[Dealership Service]
         
-        subgraph "DealershipSvc[Dealership Service]"
+        subgraph DEALERSHIP ["DEALERSHIP COMPONENTS"]
             CustomerOps[Customer Operations<br/>• Registration<br/>• Credit Applications<br/>• Profiles]
             VehicleOps[Vehicle Operations<br/>• Inventory Management<br/>• Search & Filtering<br/>• Reservations]
             SalesOps[Sales Operations<br/>• Sales Process<br/>• Financing<br/>• Transactions]
@@ -42,7 +43,7 @@ graph TB
         end
     end
 
-    subgraph "Repository Layer"
+    subgraph REPOSITORY ["REPOSITORY LAYER"]
         UserRepo[User Repository]
         ProductRepo[Product Repository]
         OrderRepo[Order Repository]
@@ -54,7 +55,7 @@ graph TB
         CacheRepo[Cache Repository]
     end
 
-    subgraph "Database Layer"
+    subgraph DATABASE ["DATABASE LAYER"]
         MongoDB[(MongoDB<br/>E-commerce Data)]
         MySQL[(MySQL<br/>Car Dealership)]
         Redis[(Redis<br/>Cache & Sessions)]
@@ -67,14 +68,13 @@ graph TB
     REST --> UserSvc
     REST --> ProductSvc
     REST --> OrderSvc
-    REST --> CustomerOps
-    REST --> VehicleOps
-    SOAP --> SalesOps
+    REST --> DealershipSvc
+    SOAP --> DealershipSvc
     GRPC --> UserSvc
-    GRPC --> ReportOps
+    GRPC --> DealershipSvc
     GraphQL --> UserSvc
     GraphQL --> ProductSvc
-    GraphQL --> ReportOps
+    GraphQL --> DealershipSvc
     WS --> SessionSvc
     WebRTC --> SessionSvc
     Webhook --> UserSvc
@@ -82,6 +82,11 @@ graph TB
     UserSvc --> UserRepo
     ProductSvc --> ProductRepo
     OrderSvc --> OrderRepo
+    
+    DealershipSvc --> CustomerOps
+    DealershipSvc --> VehicleOps
+    DealershipSvc --> SalesOps
+    DealershipSvc --> ReportOps
     CustomerOps --> CustomerRepo
     VehicleOps --> VehicleRepo
     SalesOps --> SalespersonRepo
@@ -117,8 +122,8 @@ graph TB
     class CustomerRepo,VehicleRepo,SalespersonRepo,SaleRepo,MySQL completed
     class SessionRepo,CacheRepo,Redis completed
     
-    %% Apply completed styling to DealershipSvc components
-    class CustomerOps,VehicleOps,SalesOps,ReportOps completed
+    %% Apply completed styling to DealershipSvc and components
+    class DealershipSvc,CustomerOps,VehicleOps,SalesOps,ReportOps completed
     
     %% Apply pending styling to not-yet-implemented components
     class UserSvc,ProductSvc,OrderSvc,SessionSvc pending
