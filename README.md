@@ -87,14 +87,11 @@ graph TB
     DealershipSvc --> VehicleOps
     DealershipSvc --> SalesOps
     DealershipSvc --> ReportOps
-    CustomerOps --> CustomerRepo
-    VehicleOps --> VehicleRepo
-    SalesOps --> SalespersonRepo
-    SalesOps --> SaleRepo
-    ReportOps --> CustomerRepo
-    ReportOps --> VehicleRepo
-    ReportOps --> SalespersonRepo
-    ReportOps --> SaleRepo
+    
+    DEALERSHIP --> CustomerRepo
+    DEALERSHIP --> VehicleRepo
+    DEALERSHIP --> SalespersonRepo
+    DEALERSHIP --> SaleRepo
     SessionSvc --> SessionRepo
     SessionSvc --> CacheRepo
 
