@@ -97,6 +97,14 @@ func (s *service) GetCustomerProfile(ctx context.Context, customerID string) (*C
 	}, nil
 }
 
+func (s *service) GetAllCustomers(ctx context.Context) ([]mysql.Customer, error) {
+	customers, err := s.customer_repo.GetAll()
+	if err != nil {
+		return nil, fmt.Errorf("failed to retrieve customers: %w", err)
+	}
+	return customers, nil
+}
+
 // customer helper functions
 
 func (s *service) calculateCreditScore(customer mysql.Customer) int {

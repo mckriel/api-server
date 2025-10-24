@@ -47,6 +47,7 @@ type DealershipService interface {
 	RegisterNewCustomer(ctx context.Context, application CustomerApplication) (*mysql.Customer, error)
 	ProcessCreditApplication(ctx context.Context, customerID string) (*CreditDecision, error)
 	GetCustomerProfile(ctx context.Context, customerID string) (*CustomerProfile, error)
+	GetAllCustomers(ctx context.Context) ([]mysql.Customer, error)
 
 	// vehicle
 	AddVehicleToInventory(ctx context.Context, vehicle VehicleInput) (*mysql.Vehicle, error)
