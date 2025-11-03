@@ -29,7 +29,7 @@ func (s *service) AddVehicleToInventory(ctx context.Context, vehicle VehicleInpu
 
 	err := s.vehicle_repo.Create(newVehicle)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to add %s %s to inventory: %w", vehicle.Make, vehicle.Model, err)
 	}
 
 	return &newVehicle, nil
@@ -46,7 +46,7 @@ func (s *service) GetAllVehicles(ctx context.Context) ([]mysql.Vehicle, error) {
 func (s *service) GetVehicleByID(ctx context.Context, vehicleID string) (*mysql.Vehicle, error) {
 	vehicle, err := s.vehicle_repo.GetByID(vehicleID)
 	if err != nil {
-		return nil, fmt.Errorf("vehicle not found: %w", err)
+		return nil, fmt.Errorf("vehicle %s not found: %w", vehicleID, err)
 	}
 	return &vehicle, nil
 }
@@ -70,7 +70,7 @@ func (s *service) FindVehiclesForCustomers(ctx context.Context, customerID strin
 func (s *service) ReserveVehicle(ctx context.Context, vehicleID, customerID string) error {
 	vehicle, err := s.vehicle_repo.GetByID(vehicleID)
 	if err != nil {
-		return fmt.Errorf("could not find vehicle: %w", err)
+		return fmt.Errorf("could not find vehicle %s for reservation: %w", vehicleID, err)
 	}
 
 	if vehicle.Status != mysql.VehicleStatusAvailable {
@@ -79,7 +79,7 @@ func (s *service) ReserveVehicle(ctx context.Context, vehicleID, customerID stri
 
 	_, err = s.customer_repo.GetByID(customerID)
 	if err != nil {
-		return fmt.Errorf("customer not found: %w", err)
+		return fmt.Errorf("customer %s not found for vehicle reservation: %w", customerID, err)
 	}
 
 	vehicle.Status = mysql.VehicleStatusReserved
@@ -87,7 +87,7 @@ func (s *service) ReserveVehicle(ctx context.Context, vehicleID, customerID stri
 
 	err = s.vehicle_repo.Update(vehicleID, vehicle)
 	if err != nil {
-		return fmt.Errorf("failed to reserve vehicle: %w", err)
+		return fmt.Errorf("failed to reserve vehicle %s for customer %s: %w", vehicleID, customerID, err)
 	}
 
 	return nil

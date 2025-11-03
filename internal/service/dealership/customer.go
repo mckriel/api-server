@@ -29,7 +29,7 @@ func (s *service) RegisterNewCustomer(ctx context.Context, application CustomerA
 
 	err := s.customer_repo.Create(customer)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to register customer %s %s: %w", application.FirstName, application.LastName, err)
 	}
 
 	return &customer, nil
@@ -38,7 +38,7 @@ func (s *service) RegisterNewCustomer(ctx context.Context, application CustomerA
 func (s *service) ProcessCreditApplication(ctx context.Context, customerID string) (*CreditDecision, error) {
 	customer, err := s.customer_repo.GetByID(customerID)
 	if err != nil {
-		return nil, fmt.Errorf("customer not found: %w", err)
+		return nil, fmt.Errorf("customer %s not found for credit application: %w", customerID, err)
 	}
 
 	creditScore := s.calculateCreditScore(customer)
@@ -74,7 +74,7 @@ func (s *service) ProcessCreditApplication(ctx context.Context, customerID strin
 func (s *service) GetCustomerProfile(ctx context.Context, customerID string) (*CustomerProfile, error) {
 	customer, err := s.customer_repo.GetByID(customerID)
 	if err != nil {
-		return nil, fmt.Errorf("customer not found: %w", err)
+		return nil, fmt.Errorf("customer %s not found for profile: %w", customerID, err)
 	}
 
 	var purchaseHistory []mysql.Sale
@@ -84,7 +84,7 @@ func (s *service) GetCustomerProfile(ctx context.Context, customerID string) (*C
 
 	creditDecision, err := s.ProcessCreditApplication(ctx, customerID)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get credit status: %w", err)
+		return nil, fmt.Errorf("failed to get credit status for customer %s: %w", customerID, err)
 	}
 
 	return &CustomerProfile{

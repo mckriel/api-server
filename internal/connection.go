@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	CONN_MYSQL   = "root:password@tcp(localhost:3306)/api_mysql"
+	CONN_MYSQL   = "root:password@tcp(localhost:3306)/api_mysql?parseTime=true"
 	CONN_MONGODB = "mongodb://localhost:27017/api_mongodb"
 	CONN_REDIS   = "localhost:6379"
 )

@@ -3,6 +3,8 @@ package rest
 import (
 	"api-servers/internal/api/rest/handler"
 	"api-servers/internal/service/dealership"
+	"encoding/json"
+	"net/http"
 
 	"github.com/gorilla/mux"
 )
@@ -13,7 +15,7 @@ func SetupRouter(dealershipService dealership.DealershipService) *mux.Router {
 	customerHandler := handler.NewCustomerHandlerService(dealershipService)
 	vehicleHandler := handler.NewVehicleHandlerService(dealershipService)
 	salesHandler := handler.NewSaleHandler(dealershipService)
-	reportingHandler := handler.NewReportingHandler(dealershipService)
+	reportingHandler := handler.NewReportHandler(dealershipService)
 
 	// customer
 	router.HandleFunc("/customers", customerHandler.GetAllCustomers).Methods("GET")
@@ -37,6 +39,15 @@ func SetupRouter(dealershipService dealership.DealershipService) *mux.Router {
 	router.HandleFunc("/report/sales", reportingHandler.GenerateSalesReport).Methods("GET")
 	router.HandleFunc("/report/performance", reportingHandler.GetTopPerformers).Methods("GET")
 	router.HandleFunc("/report/inventory", reportingHandler.GetInventoryReport).Methods("GET")
+
+	router.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(map[string]string{
+			"status":  "healthy",
+			"message": "API server is running",
+		})
+	})
 
 	return router
 }

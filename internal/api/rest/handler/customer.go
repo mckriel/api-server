@@ -3,6 +3,7 @@ package handler
 import (
 	"api-servers/internal/service/dealership"
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -24,9 +25,12 @@ func (h *CustomerHandler) GetAllCustomers(w http.ResponseWriter, r *http.Request
 
 	customers, err := h.dealership_service.GetAllCustomers(r.Context())
 	if err != nil {
+		// Add this logging
+		log.Printf("Error getting customers: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(map[string]string{
-			"error": "Failed to retrieve customers",
+			"error":  "failed to retrieve customers",
+			"detail": err.Error(), // Add error detail
 		})
 		return
 	}

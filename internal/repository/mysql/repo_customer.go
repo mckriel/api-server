@@ -35,7 +35,7 @@ func (r *customerRepository) GetByID(id string) (mysql.Customer, error) {
 		if err == sql.ErrNoRows {
 			return customer, fmt.Errorf("customer with id %s not found", id)
 		}
-		return customer, fmt.Errorf("failed to get customer: %w", err)
+		return customer, fmt.Errorf("failed to get customer by id %s: %w", id, err)
 	}
 	return customer, nil
 }
@@ -48,7 +48,7 @@ func (r *customerRepository) GetByEmail(email string) (mysql.Customer, error) {
 		if err == sql.ErrNoRows {
 			return customer, fmt.Errorf("customer with email %s not found", email)
 		}
-		return customer, fmt.Errorf("failed to get customer: %w", err)
+		return customer, fmt.Errorf("failed to get customer by email %s: %w", email, err)
 	}
 	return customer, nil
 }
@@ -60,7 +60,7 @@ func (r *customerRepository) GetByPhone(phone string) (mysql.Customer, error) {
 		if err == sql.ErrNoRows {
 			return customer, fmt.Errorf("customer with phone %s not found", phone)
 		}
-		return customer, fmt.Errorf("failed to get customer: %w", err)
+		return customer, fmt.Errorf("failed to get customer by phone %s: %w", phone, err)
 	}
 	return customer, nil
 }
@@ -72,7 +72,7 @@ func (r *customerRepository) GetByName(first_name, last_name string) (mysql.Cust
 		if err == sql.ErrNoRows {
 			return customer, fmt.Errorf("customer with name %s %s not found", first_name, last_name)
 		}
-		return customer, fmt.Errorf("failed to get customer: %w", err)
+		return customer, fmt.Errorf("failed to get customer by name %s %s: %w", first_name, last_name, err)
 	}
 	return customer, nil
 }
@@ -81,7 +81,7 @@ func (r *customerRepository) GetAll() ([]mysql.Customer, error) {
 	var customers []mysql.Customer
 	err := r.db.Connection.Select(&customers, "SELECT * FROM customers")
 	if err != nil {
-		return customers, fmt.Errorf("failed to get customers")
+		return customers, fmt.Errorf("failed to get customers: %w", err)
 	}
 	return customers, nil
 }
@@ -104,15 +104,15 @@ func (r *customerRepository) Update(id string, customer mysql.Customer) error {
 
 	result, err := r.db.Connection.NamedExec(query, customer)
 	if err != nil {
-		return fmt.Errorf("failed to update customer: %w", err)
+		return fmt.Errorf("failed to update customer %s: %w", id, err)
 	}
 
 	rows_affected, err := result.RowsAffected()
 	if err != nil {
-		return fmt.Errorf("failed to get rows affected: %w", err)
+		return fmt.Errorf("failed to get rows affected for customer %s update: %w", id, err)
 	}
 	if rows_affected == 0 {
-		return fmt.Errorf("customer with id %s not found", id)
+		return fmt.Errorf("customer with id %s not found for update", id)
 	}
 	return nil
 }
@@ -122,14 +122,14 @@ func (r *customerRepository) Delete(id string) error {
 
 	result, err := r.db.Connection.Exec(query, id)
 	if err != nil {
-		return fmt.Errorf("failed to delete customer: %w", err)
+		return fmt.Errorf("failed to delete customer %s: %w", id, err)
 	}
 	rows_affected, err := result.RowsAffected()
 	if err != nil {
-		return fmt.Errorf("failed to get rows affected: %w", err)
+		return fmt.Errorf("failed to get rows affected for customer %s deletion: %w", id, err)
 	}
 	if rows_affected == 0 {
-		return fmt.Errorf("customer with id %s not found", id)
+		return fmt.Errorf("customer with id %s not found for deletion", id)
 	}
 	return nil
 }

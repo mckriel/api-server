@@ -10,7 +10,7 @@ type ReportHandler struct {
 	dealership_service dealership.DealershipService
 }
 
-func NewReportingHandler(service dealership.DealershipService) *ReportHandler {
+func NewReportHandler(service dealership.DealershipService) *ReportHandler {
 	return &ReportHandler{
 		dealership_service: service,
 	}

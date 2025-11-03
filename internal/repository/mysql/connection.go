@@ -14,7 +14,7 @@ type Database struct {
 
 var (
 	db_instance *Database
-	once        *sync.Once
+	once        = &sync.Once{}
 )
 
 func GetDatabase() (*Database, error) {

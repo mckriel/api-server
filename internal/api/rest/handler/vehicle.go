@@ -3,6 +3,7 @@ package handler
 import (
 	"api-servers/internal/service/dealership"
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -23,9 +24,11 @@ func (h *VehicleHandler) GetAllVehicles(w http.ResponseWriter, r *http.Request) 
 	w.Header().Set("Content-Type", "application/json")
 	vehicles, err := h.dealership_service.GetAllVehicles(r.Context())
 	if err != nil {
+		log.Printf("Error getting all vehicles: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(map[string]string{
-			"error": "failed to retrieve vehicles",
+			"error":  "failed to retrieve vehicles",
+			"detail": err.Error(),
 		})
 		return
 	}
@@ -42,10 +45,12 @@ func (h *VehicleHandler) GetVehicleByID(w http.ResponseWriter, r *http.Request) 
 	w.Header().Set("Content-Type", "application/json")
 	vehicle, err := h.dealership_service.GetVehicleByID(r.Context(), vehicleID)
 	if err != nil {
+		log.Printf("Error getting vehicle %s: %v", vehicleID, err)
 		w.WriteHeader(http.StatusNotFound)
 		json.NewEncoder(w).Encode(map[string]string{
 			"error":      "vehicle not found",
 			"vehicle_id": vehicleID,
+			"detail":     err.Error(),
 		})
 		return
 	}
@@ -68,9 +73,11 @@ func (h *VehicleHandler) CreateVehicle(w http.ResponseWriter, r *http.Request) {
 
 	vehicle, err := h.dealership_service.AddVehicleToInventory(r.Context(), vehicleDetails)
 	if err != nil {
+		log.Printf("Error adding vehicle to inventory: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(map[string]string{
-			"error": "failed to add vehicle",
+			"error":  "failed to add vehicle",
+			"detail": err.Error(),
 		})
 		return
 	}
