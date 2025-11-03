@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"api-servers/internal/api/rest/middleware"
 	"api-servers/internal/service/dealership"
 	"encoding/json"
 	"log"
@@ -24,14 +25,39 @@ func (h *CustomerHandler) GetAllCustomers(w http.ResponseWriter, r *http.Request
 	w.Header().Set("Content-Type", "application/json")
 
 	customers, err := h.dealership_service.GetAllCustomers(r.Context())
+
 	if err != nil {
-		// Add this logging
 		log.Printf("Error getting customers: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(map[string]string{
 			"error":  "failed to retrieve customers",
-			"detail": err.Error(), // Add error detail
+			"detail": err.Error(),
 		})
+		return
+	}
+
+	version := middleware.GetVersionFromContext(r.Context())
+
+	if version == middleware.Version20241001 {
+		// Remove credit_score for older version
+		oldCustomers := make([]map[string]interface{}, len(customers))
+		for i, customer := range customers {
+			oldCustomers[i] = map[string]interface{}{
+				"id":            customer.ID,
+				"first_name":    customer.First_Name,
+				"last_name":     customer.Last_Name,
+				"email":         customer.Email,
+				"phone":         customer.Phone,
+				"address":       customer.Address,
+				"city":          customer.City,
+				"state":         customer.State,
+				"zip_code":      customer.Zip_Code,
+				"date_of_birth": customer.Date_Of_Birth,
+				"created_at":    customer.Created_At,
+				"updated_at":    customer.Updated_At,
+			}
+		}
+		json.NewEncoder(w).Encode(oldCustomers)
 		return
 	}
 

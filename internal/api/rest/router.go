@@ -2,6 +2,7 @@ package rest
 
 import (
 	"api-servers/internal/api/rest/handler"
+	"api-servers/internal/api/rest/middleware"
 	"api-servers/internal/service/dealership"
 	"encoding/json"
 	"net/http"
@@ -18,7 +19,7 @@ func SetupRouter(dealershipService dealership.DealershipService) *mux.Router {
 	reportingHandler := handler.NewReportHandler(dealershipService)
 
 	// customer
-	router.HandleFunc("/customers", customerHandler.GetAllCustomers).Methods("GET")
+	router.Handle("/customers", middleware.VersioningMiddleware(http.HandlerFunc(customerHandler.GetAllCustomers))).Methods("GET")
 	router.HandleFunc("/customers/{id}", customerHandler.GetCustomerByID).Methods("GET")
 	router.HandleFunc("/customers", customerHandler.CreateCustomer).Methods("POST")
 	router.HandleFunc("/customers/{id}/credit-application", customerHandler.ProcessCreditApplication).Methods("POST")
